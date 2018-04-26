@@ -23,6 +23,17 @@ void inicializa_lista(struct l_descr *lista) {
   lista->fim=NULL;
 }
 
+bool esta_na_lista(struct l_descr *lista,char *chave) {
+  struct no *aux = lista->inicio;
+  while(aux != NULL) {
+    if (strcmp(aux->chave,chave) == 0) {
+      return true;
+    }
+    aux = aux->proximo;
+  }
+  return false;
+}
+
 void insere_lista_nula(struct l_descr *lista, char valor[255], char chave[255]) {
   lista->inicio = malloc(sizeof(struct no));
   strcpy(lista->inicio->chave, chave);
@@ -37,12 +48,22 @@ void insere_fim(struct l_descr *lista, char valor[255], char chave[255]) {
     insere_lista_nula(lista,valor,chave);
   } else {
     if (lista->fim->proximo == NULL) {
-      lista->fim->proximo = malloc(sizeof(struct no));
-      strcpy(lista->fim->proximo->chave, chave);
-      strcpy(lista->fim->proximo->valor, valor);
-      lista->fim->proximo->proximo = NULL;
-      lista->fim = lista->fim->proximo;
-      lista->cnt++;
+      if(!esta_na_lista(lista, chave)){
+        lista->fim->proximo = malloc(sizeof(struct no));
+        strcpy(lista->fim->proximo->chave, chave);
+        strcpy(lista->fim->proximo->valor, valor);
+        lista->fim->proximo->proximo = NULL;
+        lista->fim = lista->fim->proximo;
+        lista->cnt++;
+      }else{
+        struct no *aux = lista->inicio;
+        while(aux != NULL){
+          if(strcmp(aux->chave, chave) == 0){
+            strcpy(aux->valor, valor);
+          }
+          aux = aux->proximo;
+        }
+      }
     }
   }
 }
@@ -173,17 +194,6 @@ void le_no(struct l_descr *lista){
   }
 
   insere_fim(lista, valor, chave);
-}
-
-bool esta_na_lista(struct l_descr *lista,char *chave) {
-  struct no *aux = lista->inicio;
-  while(aux != NULL) {
-    if (strcmp(aux->chave,chave) == 0) {
-      return true;
-    }
-    aux = aux->proximo;
-  }
-  return false;
 }
 
 void exclusao(struct l_descr *lista) {
