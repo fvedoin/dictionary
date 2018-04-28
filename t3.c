@@ -47,22 +47,21 @@ void insere_fim(struct l_descr *lista, char valor[255], char chave[255]) {
   if (lista->inicio == NULL) {
     insere_lista_nula(lista,valor,chave);
   } else {
-    if (lista->fim->proximo == NULL) {
-      if(!esta_na_lista(lista, chave)){
-        lista->fim->proximo = malloc(sizeof(struct no));
-        strcpy(lista->fim->proximo->chave, chave);
-        strcpy(lista->fim->proximo->valor, valor);
-        lista->fim->proximo->proximo = NULL;
-        lista->fim = lista->fim->proximo;
-        lista->cnt++;
-      }else{
-        struct no *aux = lista->inicio;
-        while(aux != NULL){
-          if(strcmp(aux->chave, chave) == 0){
-            strcpy(aux->valor, valor);
-          }
-          aux = aux->proximo;
+    if(!esta_na_lista(lista, chave)){
+      lista->fim->proximo = malloc(sizeof(struct no));
+      strcpy(lista->fim->proximo->chave, chave);
+      strcpy(lista->fim->proximo->valor, valor);
+      lista->fim->proximo->proximo = NULL;
+      lista->fim = lista->fim->proximo;
+      lista->cnt++;
+    }else{
+      struct no *aux = lista->inicio;
+      while(aux != NULL){
+        if(strcmp(aux->chave, chave) == 0){
+          strcpy(aux->valor, valor);
+          return;
         }
+        aux = aux->proximo;
       }
     }
   }
